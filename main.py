@@ -89,18 +89,18 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                     car_model = ' '.join(car_model)
 
                 mileage_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered mileage")
-                mileage = mileage_td.find("p", class_='val').contents[0].strip()
+                mileage = mileage_td.find("p", class_='val').contents[0].strip().replace("km", "")
                 date_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered year")
                 date = date_td.find("p", class_='val').contents[0].strip()
                 year = date[0:4]
                 month = date[5:]
                 engine_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered engine")
-                engine = engine_td.find("p", class_='val').contents[0].strip()
+                engine = engine_td.find("p", class_='val').contents[0].strip().replace("cc", "")
                 location_td = car_offer.find("p", class_ = "val stock-area")
                 location = location_td.find("span").contents[0].strip()
                 original_price = car_offer.find("p", class_ = "original-vehicle-price").contents[0].strip().replace(',', '')
                 current_price =  car_offer.find("span", class_ = "price").contents[0].strip().replace('$', '').replace(",", '')
-                discount = car_offer.find("p", class_ = "save-rate").contents[0].strip()
+                discount = car_offer.find("p", class_ = "save-rate").contents[0].strip().replace("%", "")
                 total_price_p = car_offer.find("p", class_ = "total-price")
                 total_price = total_price_p.find("span", class_=None).contents[0].strip().replace('$', '').replace(",", '')
                 shipping_price = int(total_price) - int(current_price)
@@ -182,28 +182,28 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
         print(errors)
 
     # define data dictionary
-    data = {"vehicle_id":vehicle_id_list,
-            "car_model":car_model_list,
-            "mileage":mileage_list,
-            "engine":engine_list,
-            "year":year_list,
-            "auction_grade":auction_grade_list,
-            "steering":steering_list,
-            "total_price":total_price_list,
+    data = {"Vehicle ID":vehicle_id_list,
+            "Model":car_model_list,
+            "Mileage (km)":mileage_list,
+            "Engine (cc)":engine_list,
+            "Year":year_list,
+            "Auction Grade":auction_grade_list,
+            "Steering":steering_list,
+            "Total Price USD":total_price_list,
             #"month":month_list,
-            "original_price":original_price_list,
-            "current_price":current_price_list,
-            "discount":discount_list,
-            "shipping_price":shipping_price_list,
-            "location":location_list,
-            "model_code":model_code_list,
-            "fuel":fuel_list,
-            "seats":seats_list,
-            "engine_code":engine_code_list,
-            "color":color_list,
-            "drive":drive_list,
-            "doors":doors_list,
-            "vehicle_url": vehicle_url_list
+            "Original Price USD":original_price_list,
+            "Current Price USD":current_price_list,
+            "Discount %":discount_list,
+            "Shipping Price USD":shipping_price_list,
+            "Location":location_list,
+            "Model Code":model_code_list,
+            "Fuel":fuel_list,
+            "Seats":seats_list,
+            "Engine Code":engine_code_list,
+            "Color":color_list,
+            "Drive":drive_list,
+            "Doors":doors_list,
+            "URL": vehicle_url_list
     }
 
     # create dataframe from dict, save to excel
@@ -212,4 +212,4 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
-scrape(pages_to_loop_through = 3)
+scrape()
