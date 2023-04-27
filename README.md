@@ -35,6 +35,7 @@ The data is then saved into an excel file in format JDM_Data_{date} in the scrip
 The shipping costs should be localized by the requests library.
 
 In the future I would love to add some additional sheets to create some funky graphs.
+I would also like to scrape the auction sheet and condition sheet links from all car-specific URLs.
 
 Hope someone will find this useful,
 Thanks,
