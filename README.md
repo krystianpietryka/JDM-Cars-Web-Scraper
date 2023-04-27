@@ -39,3 +39,6 @@ In the future I would love to add some additional sheets to create some funky gr
 Hope someone will find this useful,
 Thanks,
 Krystian 
+
+Required libraries:
+requests, bs4 (beautiful soup), pandas
