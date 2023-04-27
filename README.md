@@ -10,22 +10,22 @@ Mileage (km) <br />
 Engine (cc) <br />
 Year <br />
 Auction Grade - 2 / 3 / 3.5 / 4 / 4.5 / 5 / 6 / R (accident repaired) / RA (light accident repaired) <br />
-Steering - Right / Left / Center
-Transmission Automatic / Manual / CVT / Semi AT / Unspecified
-Total Price USD
-Original Price USD
-Current Price USD
-Discount %
-Shipping Price USD
-Location - Japanese Region / Korea / Singapore
-Model Code
-Fuel - Petrol / Diesel / LPG / Electric / Hybrid
-Seats
-Engine Code
-Color
-Drive - 2WD / 4WD
-Number of Doors
-Auction URL
+Steering - Right / Left / Center <br />
+Transmission Automatic / Manual / CVT / Semi AT / Unspecified <br />
+Total Price USD <br />
+Original Price USD <br />
+Current Price USD <br />
+Discount % <br />
+Shipping Price USD <br />
+Location - Japanese Region / Korea / Singapore <br />
+Model Code <br />
+Fuel - Petrol / Diesel / LPG / Electric / Hybrid <br />
+Seats <br />
+Engine Code <br />
+Color <br />
+Drive - 2WD / 4WD <br />
+Number of Doors <br />
+Auction URL <br />
 
 
 # The data is then saved into an excel file in format JDM_Data_{date} in the script folder.
