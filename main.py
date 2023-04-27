@@ -46,6 +46,7 @@ total_price_list =[]
 shipping_price_list =[]
 model_code_list =[]
 steering_list =[]
+transmission_list = []
 fuel_list =[]
 seats_list =[]
 engine_code_list =[]
@@ -105,6 +106,14 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                 total_price = total_price_p.find("span", class_=None).contents[0].strip().replace('$', '').replace(",", '')
                 shipping_price = int(total_price) - int(current_price)
 
+                transmission_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered trans")
+                transmission = transmission_td.find("p", class_='val').contents[0].strip()
+
+                if transmission == 'AT':
+                    transmission = 'Automatic'
+                if transmission == 'MT':
+                    transmission = "Manual"
+                
                 table_detailed_spec = car_offer.find("table", class_ = "table-detailed-spec")
                 table_rows = table_detailed_spec.find_all("tr")
                 first_row = table_rows[0]
@@ -141,6 +150,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                     print(shipping_price)
                     print(model_code)
                     print(steering)
+                    print(transmission)
                     print(fuel)
                     print(seats)
                     print(engine_code)
@@ -166,6 +176,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                 shipping_price_list.append(shipping_price)
                 model_code_list.append(model_code)
                 steering_list.append(steering)
+                transmission_list.append(transmission)
                 fuel_list.append(fuel)
                 seats_list.append(seats)
                 engine_code_list.append(engine_code)
@@ -189,6 +200,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
             "Year":year_list,
             "Auction Grade":auction_grade_list,
             "Steering":steering_list,
+            "Transmission":transmission_list,
             "Total Price USD":total_price_list,
             #"month":month_list,
             "Original Price USD":original_price_list,
@@ -212,4 +224,4 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
-scrape()
+scrape(pages_to_loop_through=3)
