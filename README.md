@@ -1,6 +1,6 @@
-﻿# JDM_Scraper
+﻿## JDM_Scraper
 
-# A Python web-scraping script which extracts the data from https://www.beforward.jp, a japanese used cars exporter site.
+A Python web-scraping script which extracts the data from https://www.beforward.jp, a japanese used cars exporter site.
 
 ## Extracted parameters:
 Vehicle ID - internal beforward reference number <br />
