@@ -224,4 +224,4 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
-scrape(pages_to_loop_through=3)
+scrape()
