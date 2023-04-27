@@ -3,7 +3,7 @@
 # A Python web-scraping script which extracts the data from https://www.beforward.jp, a japanese used car exporter site.
 
 ## Extracted parameters:
-'
+
 Vehicle ID - internal beforward reference number
 Model
 Mileage (km)
@@ -26,7 +26,7 @@ Color
 Drive - 2WD / 4WD
 Number of Doors
 Auction URL
-'
+
 
 # The data is then saved into an excel file in format JDM_Data_{date} in the script folder.
 ![image](https://user-images.githubusercontent.com/96234810/234986258-97b7fea3-4976-4d16-82fd-a7d84d16663d.png)
