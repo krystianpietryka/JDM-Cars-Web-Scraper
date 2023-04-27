@@ -25,8 +25,6 @@ Color
 Drive - 2WD / 4WD
 Number of Doors
 Auction URL
-![image](https://user-images.githubusercontent.com/96234810/234986400-cb68274f-dae7-4817-9bb2-1781948f0184.png)
-
 
 The data is then saved into an excel file in format JDM_Data_{date} in the script folder.
 ![image](https://user-images.githubusercontent.com/96234810/234986258-97b7fea3-4976-4d16-82fd-a7d84d16663d.png)
