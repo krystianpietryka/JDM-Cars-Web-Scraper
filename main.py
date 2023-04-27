@@ -29,6 +29,7 @@ for n in pagination_numbers:
             amount_of_pages = n
 
 # Initialize empty lists to be used in creating pandas dataframe
+vehicle_id_list = []
 vehicle_url_list = []
 car_model_list =[]
 mileage_list =[]
@@ -73,6 +74,8 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
         # loop over car offers and extract vehicle parameters
         for car_offer in car_offers:
             try:
+                vehicle_id_p = car_offer.find("p", class_="veh-stock-no")
+                vehicle_id = vehicle_id_p.find("span").contents[0].replace("Ref No. ", "")
                 make_model_p= car_offer.find("p", class_="make-model")
                 make_model_a = make_model_p.find("a",{"class":"vehicle-url-link"})
                 vehicle_url = str(homepage_url) + str(make_model_a.get("href"))
@@ -121,6 +124,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                 # display helpful data 
                 if display_all_data == 1:
                     print('\n\nSaving to excel:')
+                    print(vehicle_id)
                     print(vehicle_url)
                     print(car_model)
                     print(mileage)
@@ -145,6 +149,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                     print("\n\n")
                 
                 # append data to lists
+                vehicle_id_list.append(vehicle_id)
                 vehicle_url_list.append(vehicle_url)
                 car_model_list.append(car_model)
                 mileage_list.append(mileage)
@@ -175,7 +180,8 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
         print(errors)
 
     # define data dictionary
-    data = {"car_model":car_model_list,
+    data = {"vehicle_id":vehicle_id_list,
+            "car_model":car_model_list,
             "mileage":mileage_list,
             "engine":engine_list,
             "year":year_list,
@@ -204,4 +210,4 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
-scrape(pages_to_loop_through = 5)
+scrape(pages_to_loop_through = 3)
