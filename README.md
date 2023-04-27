@@ -4,12 +4,12 @@
 
 ## Extracted parameters:
 
-Vehicle ID - internal beforward reference number
-Model
-Mileage (km)
-Engine (cc)
-Year
-Auction Grade - 2 / 3 / 3.5 / 4 / 4.5 / 5 / 6 / R (accident repaired) / RA (light accident repaired)
+Vehicle ID - internal beforward reference number <br />
+Model <br />
+Mileage (km) <br />
+Engine (cc) <br />
+Year <br />
+Auction Grade - 2 / 3 / 3.5 / 4 / 4.5 / 5 / 6 / R (accident repaired) / RA (light accident repaired) <br />
 Steering - Right / Left / Center
 Transmission Automatic / Manual / CVT / Semi AT / Unspecified
 Total Price USD
