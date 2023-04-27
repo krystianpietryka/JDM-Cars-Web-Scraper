@@ -1,8 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from datetime import date
 
 errors = []
+today = str(date.today()).replace('-', '_')
 homepage_url = 'beforward.jp'
 
 first_url = 'https://www.beforward.jp/stocklist/icon_clearance=1/page=1/sortkey=q'
@@ -206,7 +208,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
 
     # create dataframe from dict, save to excel
     df = pd.DataFrame(data)
-    excel_filename = 'JDM_Data.xlsx'
+    excel_filename = 'JDM_Data_' + today + '.xlsx'
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
