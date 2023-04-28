@@ -2,8 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import date
+import os
+import logging
 
-errors = []
+script_dir = str(os.path.dirname(os.path.abspath(__file__)))
+LOG_FILENAME = script_dir + '/error_log.txt'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
 today = str(date.today()).replace('-', '_')
 homepage_url = 'beforward.jp'
 
@@ -23,7 +27,7 @@ for li in pagination_li:
     try: 
         pagination_numbers.append(int(pagination_a.contents[0]))
     except Exception as e:
-        errors.append(e)
+        logging.exception('Error raised')
         pass
 
 for n in pagination_numbers:
@@ -57,7 +61,7 @@ auction_grade_list =[]
 
 
 
-def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, display_errors = 0):
+def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages):
     current_page_number = 0
     for p in range(pages_to_loop_through):
         current_page_number += 1
@@ -118,7 +122,11 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                 table_rows = table_detailed_spec.find_all("tr")
                 first_row = table_rows[0]
                 second_row = table_rows[1]
-                third_row = table_rows[2]
+                try:
+                    third_row = table_rows[2]
+                    auction_grade = third_row.find("td", class_="td-colspan").contents[0].strip()
+                except:
+                    auction_grade = 'None'
 
                 model_code = first_row.find("td", class_="td-1st").contents[0].strip()
                 steering = first_row.find("td", class_="td-2nd").contents[0].strip()
@@ -130,7 +138,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                 drive = second_row.find("td", class_="td-3rd").contents[0].strip()
                 doors = second_row.find("td", class_="td-4th").contents[0].strip()
 
-                auction_grade = third_row.find("td", class_="td-colspan").contents[0].strip()
+                
                 
                 # display helpful data 
                 if display_all_data == 1:
@@ -185,12 +193,9 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
                 doors_list.append(doors)
                 auction_grade_list.append(auction_grade)
             except Exception as e:
-                errors.append(e)
-                pass
+                logging.exception('Error raised')
     
 
-    if display_errors == 1:
-        print(errors)
 
     # define data dictionary
     data = {"Vehicle ID":vehicle_id_list,
@@ -220,8 +225,8 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages, displa
 
     # create dataframe from dict, save to excel
     df = pd.DataFrame(data)
-    excel_filename = 'JDM_Data_' + today + '.xlsx'
+    excel_filename = script_dir + '/JDM_Data_' + today + '.xlsx'
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
-scrape()
+scrape(pages_to_loop_through=2)
