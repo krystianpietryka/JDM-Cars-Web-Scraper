@@ -78,6 +78,9 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages):
         # offers box more specific
         car_offers = all_offers.find_all("tr", class_="stocklist-row")
 
+        # with open("car_offers_test.txt", "w") as cot:
+        #     cot.write(str(car_offers))
+
         # loop over car offers and extract vehicle parameters
         for car_offer in car_offers:
             try:
@@ -148,6 +151,7 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages):
                     print(car_model)
                     print(mileage)
                     print(year)
+
                     print(month)
                     print(engine)
                     print(location)
@@ -224,9 +228,15 @@ def scrape(display_all_data = 0, pages_to_loop_through = amount_of_pages):
     }
 
     # create dataframe from dict, save to excel
+    def make_hyperlink(value):
+        url = "https:/{}"
+        return '=HYPERLINK("%s", "%s")' % (url.format(value), value)
+
+
     df = pd.DataFrame(data)
+    df['URL'] = df['URL'].apply(make_hyperlink)
     excel_filename = script_dir + '/JDM_Data_' + today + '.xlsx'
     df.to_excel(excel_filename, index=False, sheet_name = "carData")
 
 
-scrape(pages_to_loop_through=2)
+scrape()
