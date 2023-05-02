@@ -51,7 +51,7 @@ amount_of_pages = get_number_of_pages(first_page_soup)
 if __name__ == "__main__":
 
     # scrape data, create dataframe
-    scrape_returned_data = scrape(pages_to_loop_through = 10)
+    scrape_returned_data = scrape(pages_to_loop_through = amount_of_pages)
     data = scrape_returned_data[0]
     scraping_execution_log = scrape_returned_data[1]
     execution_log_contents += scraping_execution_log
