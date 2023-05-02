@@ -34,7 +34,8 @@ amount_of_pages = get_number_of_pages(first_page_soup)
 if __name__ == "__main__":
 
     # scrape data, create dataframe
-    data = scrape(pages_to_loop_through = 2)
+    data = scrape(pages_to_loop_through = amount_of_pages
+                  )
     dataframe = excel_statistics.create_dataframe(data)
 
     # Create directory if not exists
@@ -44,6 +45,6 @@ if __name__ == "__main__":
     with pd.ExcelWriter(excel_absolute_path) as writer:
         excel_statistics.save_to_excel(writer, dataframe, sheet_name="carData")
         avg_price_per_model = excel_statistics.average_price_per_model_code(dataframe)
-        excel_statistics.save_to_excel(writer, avg_price_per_model, sheet_name="statistics")
+        excel_statistics.save_to_excel(writer, avg_price_per_model, sheet_name="Statistics")
 
 

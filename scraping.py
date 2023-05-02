@@ -4,6 +4,7 @@ import pandas as pd
 import logging
 from timeit import default_timer as timer
 from datetime import timedelta
+import helper_functions
 
 # get the number of pages to loops through (extract the highest number from pagination buttons)
 def get_number_of_pages(first_page_soup):
@@ -184,7 +185,7 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
         timer_end = timer()
 
-    time_spent_on_scraping = timedelta(seconds=timer_end-timer_start)
+    time_spent_on_scraping = helper_functions.format_time(seconds=timer_end-timer_start)
     print("\nTime spent on scraping: ", str(time_spent_on_scraping))
     print("Average time per page: ", round(((timer_end - timer_start) / pages_to_loop_through), 2), "s")
 
