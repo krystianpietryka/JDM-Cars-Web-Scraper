@@ -33,7 +33,6 @@ def scrape(pages_to_loop_through, display_all_data = 0):
     car_model_list =[]
     mileage_list =[]
     year_list =[]
-    month_list = []
     engine_list =[]
     location_list =[]
     original_price_list =[]
@@ -84,21 +83,20 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                     car_model = ' '.join(car_model)
 
                 mileage_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered mileage")
-                mileage = mileage_td.find("p", class_='val').contents[0].strip().replace("km", "")
+                mileage = int(mileage_td.find("p", class_='val').contents[0].strip().replace("km", "").replace(',', ''))
                 date_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered year")
                 date = date_td.find("p", class_='val').contents[0].strip()
                 year = date[0:4]
-                month = date[5:]
                 engine_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered engine")
                 engine = engine_td.find("p", class_='val').contents[0].strip().replace("cc", "")
                 location_td = car_offer.find("p", class_ = "val stock-area")
                 location = location_td.find("span").contents[0].strip()
-                original_price = car_offer.find("p", class_ = "original-vehicle-price").contents[0].strip().replace(',', '')
-                current_price =  car_offer.find("span", class_ = "price").contents[0].strip().replace('$', '').replace(",", '')
+                original_price = int(car_offer.find("p", class_ = "original-vehicle-price").contents[0].strip().replace(',', ''))
+                current_price =  int(car_offer.find("span", class_ = "price").contents[0].strip().replace('$', '').replace(",", ''))
                 discount = car_offer.find("p", class_ = "save-rate").contents[0].strip().replace("%", "")
                 total_price_p = car_offer.find("p", class_ = "total-price")
-                total_price = total_price_p.find("span", class_=None).contents[0].strip().replace('$', '').replace(",", '')
-                shipping_price = int(total_price) - int(current_price)
+                total_price = int(total_price_p.find("span", class_=None).contents[0].strip().replace('$', '').replace(",", ''))
+                shipping_price = total_price - current_price
 
                 transmission_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered trans")
                 transmission = transmission_td.find("p", class_='val').contents[0].strip()
@@ -138,7 +136,7 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                     print(car_model)
                     print(mileage)
                     print(year)
-                    print(month)
+
                     print(engine)
                     print(location)
                     print(original_price)
@@ -164,7 +162,6 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                 car_model_list.append(car_model)
                 mileage_list.append(mileage)
                 year_list.append(year)
-                month_list.append(month)
                 engine_list.append(engine)
                 location_list.append(location)
                 original_price_list.append(original_price)
