@@ -42,4 +42,4 @@ Thanks,
 Krystian 
 
 # Required libraries:
-requests, bs4 (beautiful soup), pandas, openpyxl
+requests, bs4 (beautiful soup), pandas, openpyxl, pytest
