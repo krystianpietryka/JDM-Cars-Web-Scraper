@@ -40,6 +40,3 @@ I would also like to scrape the auction sheet and condition sheet links from all
 Hope someone will find this useful,
 Thanks,
 Krystian 
-
-# Required libraries:
-requests, bs4 (beautiful soup), pandas, openpyxl, pytest
