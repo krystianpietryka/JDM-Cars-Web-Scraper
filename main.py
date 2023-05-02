@@ -27,13 +27,18 @@ def create_dataframe(data):
     df['URL'] = df['URL'].apply(make_hyperlink)
     return df
 
-def save_to_excel(dataframe, excel_filename):
-    dataframe.to_excel(excel_filename, index=False, sheet_name = "carData")
+def save_to_excel(dataframe, excel_directory, excel_filename):
+    # Create directory if one does not exist
+    if not os.path.exists(excel_directory):
+          os.makedirs(excel_directory)
+    excel_absolute_path = excel_directory + excel_filename
+    dataframe.to_excel(excel_absolute_path, index=False, sheet_name = "carData")
 
 if __name__ == "__main__":
-    data = scrape(pages_to_loop_through = amount_of_pages)
+    data = scrape(pages_to_loop_through = 2)
     dataframe = create_dataframe(data)
-    excel_filename = script_dir + '/JDM_Data_' + today + '.xlsx'
-    save_to_excel(dataframe, excel_filename)
+    excel_directory = script_dir + '/JDM_DATA/'
+    excel_filename = 'JDM_DATA_' + today + '.xlsx'
+    save_to_excel(dataframe, excel_directory, excel_filename)
 
 
