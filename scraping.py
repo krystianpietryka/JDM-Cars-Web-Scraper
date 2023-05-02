@@ -24,7 +24,8 @@ def get_number_of_pages(first_page_soup):
 
 
 # Initialize empty lists to be used in creating pandas dataframe
-def scrape(pages_to_loop_through, display_all_data = 0 ):
+def scrape(pages_to_loop_through, display_all_data = 0):
+    homepage_url = 'beforward.jp'
     vehicle_id_list = []
     vehicle_url_list = []
     car_model_list =[]
@@ -56,16 +57,11 @@ def scrape(pages_to_loop_through, display_all_data = 0 ):
         current_page = requests.get(current_url)
         current_page_soup = BeautifulSoup(current_page.content, "html.parser")
 
-
-
         # offers box
         all_offers = current_page_soup.find("div", class_="cars-box-stocklist-renewal")
 
         # offers box more specific
         car_offers = all_offers.find_all("tr", class_="stocklist-row")
-
-        # with open("car_offers_test.txt", "w") as cot:
-        #     cot.write(str(car_offers))
 
         # loop over car offers and extract vehicle parameters
         for car_offer in car_offers:
@@ -137,7 +133,6 @@ def scrape(pages_to_loop_through, display_all_data = 0 ):
                     print(car_model)
                     print(mileage)
                     print(year)
-
                     print(month)
                     print(engine)
                     print(location)
@@ -197,7 +192,6 @@ def scrape(pages_to_loop_through, display_all_data = 0 ):
             "Steering":steering_list,
             "Transmission":transmission_list,
             "Total Price USD":total_price_list,
-            #"month":month_list,
             "Original Price USD":original_price_list,
             "Current Price USD":current_price_list,
             "Discount %":discount_list,
