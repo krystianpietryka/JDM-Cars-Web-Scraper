@@ -4,6 +4,7 @@ import pandas as pd
 import logging
 from timeit import default_timer as timer
 from datetime import timedelta
+import helper_functions
 
 # get the number of pages to loops through (extract the highest number from pagination buttons)
 def get_number_of_pages(first_page_soup):
@@ -26,14 +27,16 @@ def get_number_of_pages(first_page_soup):
 
 
 # Initialize empty lists to be used in creating pandas dataframe
-def scrape(pages_to_loop_through, display_all_data = 0):
+def scrape(pages_to_loop_through):
     homepage_url = 'beforward.jp'
+    execution_log = f'Starting Scraping\n\nPages to go through: {pages_to_loop_through}\n\n'
+    offers_count = 0
+    error_offers_count = 0
     vehicle_id_list = []
     vehicle_url_list = []
     car_model_list =[]
     mileage_list =[]
     year_list =[]
-    month_list = []
     engine_list =[]
     location_list =[]
     original_price_list =[]
@@ -57,7 +60,10 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
     for p in range(pages_to_loop_through):
         current_page_number += 1
-        print('\nScraping Page Number:', str(current_page_number))
+        current_page_errors = 0
+        scraping_page_number_message = 'Scraping Page Number: ' + str(current_page_number) +'\n'
+        print(scraping_page_number_message)
+        execution_log += scraping_page_number_message
         current_url = f'https://www.beforward.jp/stocklist/icon_clearance=1/page={current_page_number}/sortkey=q'
         current_page = requests.get(current_url)
         current_page_soup = BeautifulSoup(current_page.content, "html.parser")
@@ -70,6 +76,7 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
         # loop over car offers and extract vehicle parameters
         for car_offer in car_offers:
+            offers_count += 1
             try:
                 vehicle_id_p = car_offer.find("p", class_="veh-stock-no")
                 vehicle_id = vehicle_id_p.find("span").contents[0].replace("Ref No. ", "")
@@ -84,21 +91,20 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                     car_model = ' '.join(car_model)
 
                 mileage_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered mileage")
-                mileage = mileage_td.find("p", class_='val').contents[0].strip().replace("km", "")
+                mileage = int(mileage_td.find("p", class_='val').contents[0].strip().replace("km", "").replace(',', ''))
                 date_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered year")
                 date = date_td.find("p", class_='val').contents[0].strip()
                 year = date[0:4]
-                month = date[5:]
                 engine_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered engine")
                 engine = engine_td.find("p", class_='val').contents[0].strip().replace("cc", "")
                 location_td = car_offer.find("p", class_ = "val stock-area")
                 location = location_td.find("span").contents[0].strip()
-                original_price = car_offer.find("p", class_ = "original-vehicle-price").contents[0].strip().replace(',', '')
-                current_price =  car_offer.find("span", class_ = "price").contents[0].strip().replace('$', '').replace(",", '')
+                original_price = int(car_offer.find("p", class_ = "original-vehicle-price").contents[0].strip().replace(',', ''))
+                current_price =  int(car_offer.find("span", class_ = "price").contents[0].strip().replace('$', '').replace(",", ''))
                 discount = car_offer.find("p", class_ = "save-rate").contents[0].strip().replace("%", "")
                 total_price_p = car_offer.find("p", class_ = "total-price")
-                total_price = total_price_p.find("span", class_=None).contents[0].strip().replace('$', '').replace(",", '')
-                shipping_price = int(total_price) - int(current_price)
+                total_price = int(total_price_p.find("span", class_=None).contents[0].strip().replace('$', '').replace(",", ''))
+                shipping_price = total_price - current_price
 
                 transmission_td = car_offer.find("td", class_ = "basic-spec-col basic-spec-col-bordered trans")
                 transmission = transmission_td.find("p", class_='val').contents[0].strip()
@@ -130,33 +136,33 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
                 
                 
-                # display helpful data 
-                if display_all_data == 1:
-                    print('\n\nSaving to excel:')
-                    print(vehicle_id)
-                    print(vehicle_url)
-                    print(car_model)
-                    print(mileage)
-                    print(year)
-                    print(month)
-                    print(engine)
-                    print(location)
-                    print(original_price)
-                    print(current_price)
-                    print(discount)
-                    print(total_price)
-                    print(shipping_price)
-                    print(model_code)
-                    print(steering)
-                    print(transmission)
-                    print(fuel)
-                    print(seats)
-                    print(engine_code)
-                    print(color)
-                    print(drive)
-                    print(doors)
-                    print(auction_grade)
-                    print("\n\n")
+                # Log vehicle data
+                
+                # print('\n\nSaving to excel:')
+                # print(vehicle_id)
+                # print(vehicle_url)
+                # print(car_model)
+                # print(mileage)
+                # print(year)
+
+                # print(engine)
+                # print(location)
+                # print(original_price)
+                # print(current_price)
+                # print(discount)
+                # print(total_price)
+                # print(shipping_price)
+                # print(model_code)
+                # print(steering)
+                # print(transmission)
+                # print(fuel)
+                # print(seats)
+                # print(engine_code)
+                # print(color)
+                # print(drive)
+                # print(doors)
+                # print(auction_grade)
+                # print("\n\n")
                 
                 # append data to lists
                 vehicle_id_list.append(vehicle_id)
@@ -164,7 +170,6 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                 car_model_list.append(car_model)
                 mileage_list.append(mileage)
                 year_list.append(year)
-                month_list.append(month)
                 engine_list.append(engine)
                 location_list.append(location)
                 original_price_list.append(original_price)
@@ -184,12 +189,21 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                 auction_grade_list.append(auction_grade)
             except Exception as e:
                 logging.exception('Error raised')
+                error_offers_count += 1
+                current_page_errors += 1
+        execution_log += f'\tErrors on page: {current_page_errors}\n'
 
         timer_end = timer()
 
-    time_spent_on_scraping = timedelta(seconds=timer_end-timer_start)
-    print("\nTime spent on scraping: ", str(time_spent_on_scraping))
-    print("Average time per page: ", round(((timer_end - timer_start) / pages_to_loop_through), 2), "s")
+    time_spent_on_scraping = helper_functions.format_time(seconds=timer_end-timer_start)
+    time_spent_scraping_message = "\nTime spent scraping: " + str(time_spent_on_scraping) + '\n'
+    average_time_scraping_per_page_message = "Average time per page: " + str(round(((timer_end - timer_start) / pages_to_loop_through), 2)) + "s\n\n"
+    print(time_spent_scraping_message)
+    execution_log += time_spent_scraping_message
+    print(average_time_scraping_per_page_message)
+    execution_log += average_time_scraping_per_page_message 
+    execution_log += f"Errors Encountered: {error_offers_count}\n"
+    execution_log += f"Number of offers successfully scraped: {offers_count - error_offers_count}\n"
 
 
     # define data dictionary
@@ -217,4 +231,4 @@ def scrape(pages_to_loop_through, display_all_data = 0):
             "URL": vehicle_url_list
     }
 
-    return data
+    return data, execution_log
