@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import logging
+from timeit import default_timer as timer
+from datetime import timedelta
 
 # get the number of pages to loops through (extract the highest number from pagination buttons)
 def get_number_of_pages(first_page_soup):
@@ -50,9 +52,12 @@ def scrape(pages_to_loop_through, display_all_data = 0):
     doors_list =[]
     auction_grade_list =[]
     current_page_number = 0
+
+    timer_start = timer()
+
     for p in range(pages_to_loop_through):
         current_page_number += 1
-        print('\nScraping Page Number ', str(current_page_number), '\n')
+        print('\nScraping Page Number:', str(current_page_number))
         current_url = f'https://www.beforward.jp/stocklist/icon_clearance=1/page={current_page_number}/sortkey=q'
         current_page = requests.get(current_url)
         current_page_soup = BeautifulSoup(current_page.content, "html.parser")
@@ -179,7 +184,12 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                 auction_grade_list.append(auction_grade)
             except Exception as e:
                 logging.exception('Error raised')
-    
+
+        timer_end = timer()
+
+    time_spent_on_scraping = timedelta(seconds=timer_end-timer_start)
+    print("\nTime spent on scraping: ", str(time_spent_on_scraping))
+    print("Average time per page: ", round(((timer_end - timer_start) / pages_to_loop_through), 2), "s")
 
 
     # define data dictionary
