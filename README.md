@@ -10,7 +10,7 @@ Engine (cc) <br />
 Year <br />
 Auction Grade - 2 / 3 / 3.5 / 4 / 4.5 / 5 / 6 / R (accident repaired) / RA (light accident repaired) <br />
 Steering - Right / Left / Center <br />
-Transmission Automatic / Manual / CVT / Semi AT / Unspecified <br />
+Transmission - Automatic / Manual / CVT / Semi AT / Unspecified <br />
 Total Price USD <br />
 Original Price USD <br />
 Current Price USD <br />
