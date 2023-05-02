@@ -27,8 +27,11 @@ def get_number_of_pages(first_page_soup):
 
 
 # Initialize empty lists to be used in creating pandas dataframe
-def scrape(pages_to_loop_through, display_all_data = 0):
+def scrape(pages_to_loop_through):
     homepage_url = 'beforward.jp'
+    execution_log = f'Starting Scraping\n\nPages to go through: {pages_to_loop_through}\n\n'
+    offers_count = 0
+    error_offers_count = 0
     vehicle_id_list = []
     vehicle_url_list = []
     car_model_list =[]
@@ -57,7 +60,10 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
     for p in range(pages_to_loop_through):
         current_page_number += 1
-        print('\nScraping Page Number:', str(current_page_number))
+        current_page_errors = 0
+        scraping_page_number_message = 'Scraping Page Number: ' + str(current_page_number) +'\n'
+        print(scraping_page_number_message)
+        execution_log += scraping_page_number_message
         current_url = f'https://www.beforward.jp/stocklist/icon_clearance=1/page={current_page_number}/sortkey=q'
         current_page = requests.get(current_url)
         current_page_soup = BeautifulSoup(current_page.content, "html.parser")
@@ -70,6 +76,7 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
         # loop over car offers and extract vehicle parameters
         for car_offer in car_offers:
+            offers_count += 1
             try:
                 vehicle_id_p = car_offer.find("p", class_="veh-stock-no")
                 vehicle_id = vehicle_id_p.find("span").contents[0].replace("Ref No. ", "")
@@ -129,33 +136,33 @@ def scrape(pages_to_loop_through, display_all_data = 0):
 
                 
                 
-                # display helpful data 
-                if display_all_data == 1:
-                    print('\n\nSaving to excel:')
-                    print(vehicle_id)
-                    print(vehicle_url)
-                    print(car_model)
-                    print(mileage)
-                    print(year)
+                # Log vehicle data
+                
+                # print('\n\nSaving to excel:')
+                # print(vehicle_id)
+                # print(vehicle_url)
+                # print(car_model)
+                # print(mileage)
+                # print(year)
 
-                    print(engine)
-                    print(location)
-                    print(original_price)
-                    print(current_price)
-                    print(discount)
-                    print(total_price)
-                    print(shipping_price)
-                    print(model_code)
-                    print(steering)
-                    print(transmission)
-                    print(fuel)
-                    print(seats)
-                    print(engine_code)
-                    print(color)
-                    print(drive)
-                    print(doors)
-                    print(auction_grade)
-                    print("\n\n")
+                # print(engine)
+                # print(location)
+                # print(original_price)
+                # print(current_price)
+                # print(discount)
+                # print(total_price)
+                # print(shipping_price)
+                # print(model_code)
+                # print(steering)
+                # print(transmission)
+                # print(fuel)
+                # print(seats)
+                # print(engine_code)
+                # print(color)
+                # print(drive)
+                # print(doors)
+                # print(auction_grade)
+                # print("\n\n")
                 
                 # append data to lists
                 vehicle_id_list.append(vehicle_id)
@@ -182,12 +189,21 @@ def scrape(pages_to_loop_through, display_all_data = 0):
                 auction_grade_list.append(auction_grade)
             except Exception as e:
                 logging.exception('Error raised')
+                error_offers_count += 1
+                current_page_errors += 1
+        execution_log += f'\tErrors on page: {current_page_errors}\n'
 
         timer_end = timer()
 
     time_spent_on_scraping = helper_functions.format_time(seconds=timer_end-timer_start)
-    print("\nTime spent on scraping: ", str(time_spent_on_scraping))
-    print("Average time per page: ", round(((timer_end - timer_start) / pages_to_loop_through), 2), "s")
+    time_spent_scraping_message = "\nTime spent scraping: " + str(time_spent_on_scraping) + '\n'
+    average_time_scraping_per_page_message = "Average time per page: " + str(round(((timer_end - timer_start) / pages_to_loop_through), 2)) + "s\n\n"
+    print(time_spent_scraping_message)
+    execution_log += time_spent_scraping_message
+    print(average_time_scraping_per_page_message)
+    execution_log += average_time_scraping_per_page_message 
+    execution_log += f"Errors Encountered: {error_offers_count}\n"
+    execution_log += f"Number of offers successfully scraped: {offers_count - error_offers_count}\n"
 
 
     # define data dictionary
@@ -215,4 +231,4 @@ def scrape(pages_to_loop_through, display_all_data = 0):
             "URL": vehicle_url_list
     }
 
-    return data
+    return data, execution_log

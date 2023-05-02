@@ -1,3 +1,5 @@
+import os
+
 def format_time(seconds):
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
@@ -10,7 +12,10 @@ def format_time(seconds):
         pass
     return f"{hours}h {minutes}m {seconds}s"
 
-
 def make_hyperlink(value):
     url = "https:/{}"
     return '=HYPERLINK("%s", "%s")' % (url.format(value), value)
+
+def create_directory(directory):
+     if not os.path.exists(directory):
+          os.makedirs(directory)

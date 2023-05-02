@@ -8,9 +8,9 @@ def create_dataframe(data):
     df['URL'] = df['URL'].apply(helper_functions.make_hyperlink)
     return df
 
-def create_directory(excel_directory):
-     if not os.path.exists(excel_directory):
-          os.makedirs(excel_directory)
+def create_directory(directory):
+     if not os.path.exists(directory):
+          os.makedirs(directory)
 
 def save_to_excel(writer, dataframe, sheet_name):
     # Create directory if one does not exist
